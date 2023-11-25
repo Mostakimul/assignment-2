@@ -1,7 +1,13 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
-import { TUser, UserModel } from './user.interface';
+import { TOrder, TUser, UserModel } from './user.interface';
+
+const OrderSchema = new Schema<TOrder>({
+  productName: { type: String, required: true },
+  price: { type: Number, required: true },
+  quantity: { type: Number, required: true },
+});
 
 const UserSchema = new Schema<TUser>({
   userId: { type: Number, required: true },
@@ -19,6 +25,10 @@ const UserSchema = new Schema<TUser>({
     street: { type: String, required: true },
     city: { type: String, required: true },
     country: { type: String, required: true },
+  },
+  orders: {
+    type: [OrderSchema],
+    required: false,
   },
 });
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TUser } from './user.interface';
+import { TOrder, TUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserService = async (userData: TUser) => {
@@ -81,10 +81,27 @@ const deleteUserService = async (userId: number) => {
   return result;
 };
 
+const newProductAddService = async (userId: string, payload: TOrder) => {
+  // check if user already exist
+  if (!(await User.isUserExist(Number(userId)))) {
+    throw new Error();
+  }
+
+  let result = null;
+  const user = await User.findOne({ userId });
+  if (user) {
+    user.orders = [...(user.orders ?? []), payload];
+    result = await User.findOneAndUpdate({ userId: userId }, user);
+  }
+
+  return result;
+};
+
 export const UserService = {
   createUserService,
   getAllUserService,
   getSingleUserService,
   updateUser,
   deleteUserService,
+  newProductAddService,
 };

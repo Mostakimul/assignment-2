@@ -111,10 +111,36 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const newProductAdd = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const orders = req.body;
+
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    const result = await UserService.newProductAddService(userId, orders);
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteSingleUser,
+  newProductAdd,
 };
