@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TUser } from './user.interface';
 import { User } from './user.model';
 
@@ -23,6 +24,43 @@ const getSingleUserService = async (userId: number) => {
 
   return result;
 };
+const updateUser = async (userId: string, payload: Partial<TUser>) => {
+  const { fullName, address, hobbies, ...userData } = payload;
+
+  const updatedUserData: Partial<TUser> = { ...userData };
+
+  if (fullName && Object.keys(fullName).length > 0) {
+    Object.keys(fullName).forEach((key) => {
+      const nameKey = `fullName.${key}` as keyof Partial<TUser>;
+      (updatedUserData as any)[nameKey] =
+        fullName[key as keyof typeof fullName];
+    });
+  }
+  if (address && Object.keys(address).length > 0) {
+    Object.keys(address).forEach((key) => {
+      const addressKey = `address.${key}` as keyof Partial<TUser>;
+      (updatedUserData as any)[addressKey] =
+        address[key as keyof typeof address];
+    });
+  }
+
+  if (hobbies) {
+    const result = await User.findOne({ userId });
+    if (result) {
+      updatedUserData.hobbies = [...(result.hobbies ?? []), ...hobbies];
+    }
+  }
+
+  const result = await User.findOneAndUpdate(
+    { userId: userId },
+    updatedUserData,
+    {
+      new: true,
+    },
+  );
+
+  return result;
+};
 
 const deleteUserService = async (userId: number) => {
   const result = await User.deleteOne({ userId });
@@ -34,5 +72,6 @@ export const UserService = {
   createUserService,
   getAllUserService,
   getSingleUserService,
+  updateUser,
   deleteUserService,
 };
