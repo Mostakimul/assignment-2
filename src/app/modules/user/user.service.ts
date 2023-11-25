@@ -24,8 +24,15 @@ const getSingleUserService = async (userId: number) => {
   return result;
 };
 
+const deleteUserService = async (userId: number) => {
+  const result = await User.deleteOne({ userId });
+
+  return result;
+};
+
 export const UserService = {
   createUserService,
   getAllUserService,
   getSingleUserService,
+  deleteUserService,
 };
