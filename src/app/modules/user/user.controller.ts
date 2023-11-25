@@ -136,6 +136,28 @@ const newProductAdd = async (req: Request, res: Response) => {
   }
 };
 
+const getSingleUserOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserService.getAllOrderService(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getAllUsers,
@@ -143,4 +165,5 @@ export const UserController = {
   updateUser,
   deleteSingleUser,
   newProductAdd,
+  getSingleUserOrders,
 };

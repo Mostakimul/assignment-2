@@ -97,6 +97,16 @@ const newProductAddService = async (userId: string, payload: TOrder) => {
   return result;
 };
 
+const getAllOrderService = async (userId: string) => {
+  // check if user already exist
+  if (!(await User.isUserExist(Number(userId)))) {
+    throw new Error();
+  }
+  const result = await User.findOne({ userId }, { orders: 1 });
+
+  return result;
+};
+
 export const UserService = {
   createUserService,
   getAllUserService,
@@ -104,4 +114,5 @@ export const UserService = {
   updateUser,
   deleteUserService,
   newProductAddService,
+  getAllOrderService,
 };
