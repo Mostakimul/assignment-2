@@ -6,7 +6,7 @@
 
 ## Frontend repository link
 
-- [Book Management Github Repo](https://github.com/Mostakimul/assignment-2).
+- [User Management Github Repo](https://github.com/Mostakimul/assignment-2).
 
 # Startup instructions:
 
