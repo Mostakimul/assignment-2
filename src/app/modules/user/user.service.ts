@@ -20,11 +20,20 @@ const getAllUserService = async () => {
 };
 
 const getSingleUserService = async (userId: number) => {
+  // check if user already exist
+  if (!(await User.isUserExist(userId))) {
+    throw new Error();
+  }
+
   const result = await User.findOne({ userId });
 
   return result;
 };
 const updateUser = async (userId: string, payload: Partial<TUser>) => {
+  // check if user already exist
+  if (!(await User.isUserExist(Number(userId)))) {
+    throw new Error();
+  }
   const { fullName, address, hobbies, ...userData } = payload;
 
   const updatedUserData: Partial<TUser> = { ...userData };
@@ -63,6 +72,10 @@ const updateUser = async (userId: string, payload: Partial<TUser>) => {
 };
 
 const deleteUserService = async (userId: number) => {
+  // check if user already exist
+  if (!(await User.isUserExist(userId))) {
+    throw new Error();
+  }
   const result = await User.deleteOne({ userId });
 
   return result;
