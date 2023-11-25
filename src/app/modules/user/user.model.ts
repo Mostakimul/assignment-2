@@ -1,5 +1,7 @@
+import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
-import { TUser } from './user.interface';
+import config from '../../config';
+import { TUser, UserModel } from './user.interface';
 
 const UserSchema = new Schema<TUser>({
   userId: { type: Number, required: true },
@@ -20,4 +22,26 @@ const UserSchema = new Schema<TUser>({
   },
 });
 
-export const UserModel = model<TUser>('User', UserSchema);
+// creating a custom static method
+UserSchema.statics.isUserExist = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
+// hashing password before saving user to db
+UserSchema.pre('save', async function (next) {
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
+
+// removing password from response
+UserSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  return userObject;
+};
+
+export const User = model<TUser, UserModel>('User', UserSchema);

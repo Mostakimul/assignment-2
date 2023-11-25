@@ -1,3 +1,5 @@
+import { Model } from 'mongoose';
+
 export type TUser = {
   userId: number;
   username: string;
@@ -16,3 +18,8 @@ export type TUser = {
     country: string;
   };
 };
+
+export interface UserModel extends Model<TUser> {
+  // eslint-disable-next-line no-unused-vars
+  isUserExist(userId: number): Promise<TUser | null>;
+}
