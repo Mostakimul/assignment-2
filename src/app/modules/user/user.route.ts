@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/', UserController.createUser);
 router.put('/:userId/orders', UserController.newProductAdd);
+router.get('/:userId/orders/total-price', UserController.getTotalPrice);
 router.get('/:userId/orders', UserController.getSingleUserOrders);
 router.put('/:userId', UserController.updateUser);
 router.get('/:userId', UserController.getSingleUser);

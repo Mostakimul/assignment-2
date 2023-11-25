@@ -107,6 +107,24 @@ const getAllOrderService = async (userId: string) => {
   return result;
 };
 
+const getAllOrderTotalPriceService = async (userId: string) => {
+  // check if user already exist
+  if (!(await User.isUserExist(Number(userId)))) {
+    throw new Error();
+  }
+  const result = await User.findOne({ userId }, { orders: 1 });
+
+  // calculating price
+  let totalPrice = 0;
+  if (result?.orders) {
+    totalPrice = result?.orders.reduce((acc, order) => {
+      return acc + order.price * order.quantity;
+    }, 0);
+  }
+
+  return totalPrice;
+};
+
 export const UserService = {
   createUserService,
   getAllUserService,
@@ -115,4 +133,5 @@ export const UserService = {
   deleteUserService,
   newProductAddService,
   getAllOrderService,
+  getAllOrderTotalPriceService,
 };
