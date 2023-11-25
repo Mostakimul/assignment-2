@@ -12,6 +12,13 @@ const createUserService = async (userData: TUser) => {
   return result;
 };
 
+const getAllUserService = async () => {
+  const result = await User.find();
+
+  return result;
+};
+
 export const UserService = {
   createUserService,
+  getAllUserService,
 };
